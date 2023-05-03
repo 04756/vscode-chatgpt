@@ -158,7 +158,7 @@ export default class ChatGptViewProvider implements vscode.WebviewViewProvider {
 		this.inProgress = false;
 		this.sendMessage({ type: 'showInProgress', inProgress: this.inProgress });
 		const responseInMarkdown = !this.isCodexModel;
-		this.sendMessage({ type: 'addResponse', value: this.response, done: true, id: this.currentMessageId, autoScroll: this.autoScroll, responseInMarkdown });
+		this.sendMessage({ type: 'addResponse', rawId: this.conversationId, value: this.response, done: true, id: this.currentMessageId, autoScroll: this.autoScroll, responseInMarkdown });
 		this.logEvent("stopped-generating");
 	}
 
@@ -362,7 +362,7 @@ export default class ChatGptViewProvider implements vscode.WebviewViewProvider {
 						abortSignal: this.abortController.signal,
 						onProgress: (partialResponse) => {
 							this.response = partialResponse.text;
-							this.sendMessage({ type: 'addResponse', value: this.response, id: this.conversationId, autoScroll: this.autoScroll, responseInMarkdown });
+							this.sendMessage({ type: 'addResponse', rawId: this.conversationId, value: this.response, id: this.conversationId, autoScroll: this.autoScroll, responseInMarkdown });
 						},
 					});
 					({ text: this.response, id: this.conversationId, parentMessageId: this.messageId } = gpt3Response);
@@ -374,7 +374,7 @@ export default class ChatGptViewProvider implements vscode.WebviewViewProvider {
 						abortSignal: this.abortController.signal,
 						onProgress: (partialResponse) => {
 							this.response = partialResponse.text;
-							this.sendMessage({ type: 'addResponse', value: this.response, id: this.messageId, autoScroll: this.autoScroll, responseInMarkdown });
+							this.sendMessage({ type: 'addResponse', rawId: this.conversationId, value: this.response, id: this.messageId, autoScroll: this.autoScroll, responseInMarkdown });
 						},
 					}));
 				}
@@ -396,7 +396,7 @@ export default class ChatGptViewProvider implements vscode.WebviewViewProvider {
 					});
 			}
 
-			this.sendMessage({ type: 'addResponse', value: this.response, done: true, id: this.currentMessageId, autoScroll: this.autoScroll, responseInMarkdown });
+			this.sendMessage({ type: 'addResponse', rawId: this.conversationId, value: this.response, done: true, id: this.currentMessageId, autoScroll: this.autoScroll, responseInMarkdown });
 
 			if (this.subscribeToResponse) {
 				vscode.window.showInformationMessage("ChatGPT responded to your question.", "Open conversation").then(async () => {
