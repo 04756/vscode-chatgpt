@@ -104,8 +104,12 @@
                 }
                 break;
             case "addResponse":
-                let existingMessage = message.rawId && document.getElementById(message.id);
+                let existingMessage = message.id && document.getElementById(message.id);
                 let updatedValue = "";
+
+                if (!message.hasOwnProperty('rawId')) {
+                    existingMessage = document.getElementById('undefined');
+                }
 
                 const unEscapeHtml = (unsafe) => {
                     return unsafe.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;');

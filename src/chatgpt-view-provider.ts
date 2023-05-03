@@ -85,7 +85,7 @@ export default class ChatGptViewProvider implements vscode.WebviewViewProvider {
 		webviewView.webview.onDidReceiveMessage(async data => {
 			switch (data.type) {
 				case 'addFreeTextQuestion':
-					this.sendApiRequest(data.value, { command: "freeText" });
+					this.sendApiRequest(data.value, { command: "freeText", previousAnswer: this.response });
 					break;
 				case 'editCode':
 					const escapedString = (data.value as string).replace(/\$/g, '\\$');;
@@ -416,7 +416,7 @@ export default class ChatGptViewProvider implements vscode.WebviewViewProvider {
 					if (choice === "Clear conversation and retry") {
 						await vscode.commands.executeCommand("vscode-chatgpt.clearConversation");
 						await delay(250);
-						this.sendApiRequest(prompt, { command: options.command, code: options.code });
+						this.sendApiRequest(prompt, { command: options.command, code: options.code, previousAnswer: this.response });
 					}
 				});
 			} else if (error.statusCode === 400) {

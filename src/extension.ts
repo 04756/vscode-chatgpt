@@ -37,7 +37,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		});
 
 		if (value) {
-			provider?.sendApiRequest(value, { command: "freeText" });
+			provider?.sendApiRequest(value, { command: "freeText", previousAnswer: this?.response });
 		}
 	});
 
